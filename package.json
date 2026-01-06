@@ -1,11 +1,23 @@
 {
-  "name": "pollinations-webhook-bridge",
+  "name": "nextjs-boilerplate",
   "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "vercel dev"
-  },
+  "description": "Next.js boilerplate project",
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-next": "latest"
   }
 }
