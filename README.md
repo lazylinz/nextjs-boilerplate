@@ -1,114 +1,133 @@
-# Express.js Server
+# Next.js Boilerplate with Vercel Serverless Architecture
 
-A modern Express.js server setup with Node 24.x runtime.
+A modern Next.js boilerplate built on Vercel's serverless platform with API routes for webhook handling and Pollinations AI integration.
 
 ## Features
 
-- ✅ Express.js framework
-- ✅ Node.js 24.x support
-- ✅ CORS enabled
-- ✅ JSON parsing middleware
-- ✅ Health check endpoint
-- ✅ Webhook support
-- ✅ Environment variable support
-
-## Prerequisites
-
-- Node.js 24.x or higher
-- npm or yarn
-
-## Installation
-
-```bash
-# Install dependencies
-npm install
-```
-
-## Development
-
-```bash
-# Start development server with auto-reload
-npm run dev
-
-# Start production server
-npm start
-```
-
-The server will run on `http://localhost:3000` by default.
-
-## API Endpoints
-
-### Health Check
-- **GET** `/health`
-  - Returns server status
-  - Response: `{ status: 'ok', message: 'Server is running' }`
-
-### API Root
-- **GET** `/api`
-  - Returns welcome message
-  - Response: `{ message: 'Welcome to Express API' }`
-
-### Webhook
-- **POST** `/api/webhook`
-  - Accepts webhook events
-  - Body: `{ event: string, data: any }`
-  - Response: `{ success: true, message: string, event: string }`
-
-## Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-PORT=3000
-NODE_ENV=development
-```
-
-## Deployment
-
-### Vercel Deployment
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Vercel will automatically detect the Node.js runtime from `package.json`
-4. Set environment variables in Vercel dashboard if needed
-5. Deploy
-
-### Environment Setup
-
-The `vercel.json` configuration file handles deployment settings.
-
-### Local Testing Before Deploy
-
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Test locally
-vercel dev
-
-# Deploy
-vercel
-```
+- **Vercel Serverless**: Deployed serverless functions without Express or custom server
+- **Node.js 24.x**: Modern runtime with latest features
+- **Webhook Handler**: POST endpoint that processes and forwards payloads to Pollinations AI
+- **Security**: Strips sensitive keys before forwarding requests
+- **Nonce Generation**: Adds request uniqueness and security tokens
 
 ## Project Structure
 
 ```
 .
-├── server.js           # Main Express server entry point
-├── package.json        # Dependencies and scripts
-├── .env                # Environment variables (not in git)
-├── .gitignore          # Git ignore rules
-├── vercel.json         # Vercel deployment config
-├── LICENSE             # MIT License
-├── README.md           # This file
-└── api/
-    └── webhook.js      # Webhook handler reference
+├── api/
+│   └── webhook.js        # Serverless webhook handler function
+├── vercel.json          # Vercel configuration
+├── package.json         # Project dependencies and scripts
+├── README.md            # This file
+├── LICENSE              # MIT License
+└── .gitignore           # Git ignore rules
 ```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 24.x or higher
+- Vercel CLI (optional, for local development)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/lazylinz/nextjs-boilerplate.git
+   cd nextjs-boilerplate
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000` (or the Vercel dev port).
+
+### Building for Production
+
+Build the project:
+
+```bash
+npm run build
+```
+
+### Starting the Production Server
+
+Start the production server:
+
+```bash
+npm start
+```
+
+## API Endpoints
+
+### POST /api/webhook
+
+Webhook endpoint that processes incoming requests and forwards them to Pollinations AI.
+
+**Request Body:**
+```json
+{
+  "message": "Your request message",
+  "model": "desired-model"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Webhook processed and forwarded successfully",
+  "data": { /* Pollinations AI response */ }
+}
+```
+
+**Features:**
+- Accepts POST requests only (returns 405 for other methods)
+- Strips sensitive fields: `apiKey`, `secret`, `token`, `password`
+- Adds a unique nonce to each request
+- Includes timestamp in ISO 8601 format
+- Forwards processed payload to Pollinations AI API
+- Comprehensive error handling and logging
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import the repository in [Vercel Dashboard](https://vercel.com/dashboard)
+3. Vercel will automatically detect the Next.js project and configure deployment
+4. Your API routes will be automatically deployed as serverless functions
+
+### Environment Variables
+
+Add any required environment variables in the Vercel Dashboard under Project Settings > Environment Variables.
+
+## Security
+
+- Sensitive fields (API keys, passwords, tokens) are automatically stripped from forwarded requests
+- Each request is assigned a unique nonce for security and tracking
+- Requests are validated (POST only)
+- Error messages are descriptive but don't expose internal details
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+Lazy Linz (@lazylinz)
 
 ## Support
 
-For issues or questions, please check the repository issues page.
+For issues, questions, or contributions, please open an issue or submit a pull request on GitHub.
