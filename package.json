@@ -1,23 +1,28 @@
 {
-  "name": "nextjs-boilerplate",
+  "name": "express-server",
   "version": "1.0.0",
-  "description": "Next.js boilerplate project",
+  "description": "Express.js server with Node 24.x",
+  "main": "server.js",
+  "type": "module",
   "engines": {
     "node": "24.x"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "echo 'No build step required for Express server'"
   },
+  "keywords": [
+    "express",
+    "nodejs",
+    "server"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
   },
-  "devDependencies": {
-    "eslint": "latest",
-    "eslint-config-next": "latest"
-  }
+  "devDependencies": {}
 }
