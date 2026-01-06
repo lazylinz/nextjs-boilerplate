@@ -1,6 +1,1 @@
-{
-  "version": 2,
-  "routes": [
-    { "src": "/webhook", "dest": "/api/webhook.js", "methods": ["POST", "OPTIONS"] }
-  ]
-}
+{ "version": 2, "buildCommand": "echo 'No build step required'", "outputDirectory": ".", "env": { "NODE_ENV": "production" }, "envPrefix": "", "framework": null, "functions": { "server.js": { "runtime": "nodejs24.x" } } }
