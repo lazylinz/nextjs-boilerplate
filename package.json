@@ -1,23 +1,21 @@
 {
   "name": "nextjs-boilerplate",
   "version": "1.0.0",
-  "description": "Next.js boilerplate with Vercel serverless architecture",
-  "main": "index.js",
+  "description": "A modern Next.js 16 boilerplate with TypeScript and Vercel configuration",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build",
-    "start": "vercel start"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "nextjs",
-    "vercel",
-    "serverless"
-  ],
-  "author": "lazylinz",
-  "license": "MIT",
-  "engines": {
-    "node": "24.x"
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.3.0"
+  }
 }

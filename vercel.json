@@ -1,3 +1,22 @@
 {
-  "version": 2
+  "projectId": "",
+  "orgId": "",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@api_url",
+    "WEBHOOK_SECRET": "@webhook_secret"
+  },
+  "regions": [
+    "iad1"
+  ],
+  "functions": {
+    "pages/api/**": {
+      "maxDuration": 60
+    }
+  }
 }

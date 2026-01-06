@@ -1,133 +1,196 @@
-# Next.js Boilerplate with Vercel Serverless Architecture
+# Next.js 16 Boilerplate
 
-A modern Next.js boilerplate built on Vercel's serverless platform with API routes for webhook handling and Pollinations AI integration.
+A modern, production-ready Next.js 16 boilerplate with TypeScript, webhook API integration, and Vercel configuration.
 
-## Features
+## 🚀 Features
 
-- **Vercel Serverless**: Deployed serverless functions without Express or custom server
-- **Node.js 24.x**: Modern runtime with latest features
-- **Webhook Handler**: POST endpoint that processes and forwards payloads to Pollinations AI
-- **Security**: Strips sensitive keys before forwarding requests
-- **Nonce Generation**: Adds request uniqueness and security tokens
+- **Next.js 16**: Latest version with App Router support
+- **TypeScript**: Full type safety with strict mode enabled
+- **React 19**: Latest React version with new features
+- **Webhook API**: Pre-configured API route for webhook handling with signature verification
+- **Vercel Ready**: Optimized configuration for Vercel deployment
+- **ESLint & TypeScript**: Configured for code quality
+- **Environment Variables**: Pre-configured for different environments
 
-## Project Structure
+## 📋 Project Structure
 
 ```
-.
-├── api/
-│   └── webhook.js        # Serverless webhook handler function
-├── vercel.json          # Vercel configuration
-├── package.json         # Project dependencies and scripts
-├── README.md            # This file
-├── LICENSE              # MIT License
-└── .gitignore           # Git ignore rules
+├── pages/
+│   ├── _document.tsx       # Custom document wrapper
+│   ├── index.tsx           # Home page
+│   └── api/
+│       └── webhook.ts      # Webhook API endpoint
+├── public/                 # Static assets
+├── .gitignore             # Git ignore rules
+├── next.config.js         # Next.js configuration
+├── tsconfig.json          # TypeScript configuration
+├── vercel.json            # Vercel deployment configuration
+├── package.json           # Dependencies and scripts
+└── README.md              # This file
 ```
 
-## Getting Started
+## 🛠️ Getting Started
 
 ### Prerequisites
-
-- Node.js 24.x or higher
-- Vercel CLI (optional, for local development)
+- Node.js 18.17 or higher
+- npm or yarn package manager
 
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/lazylinz/nextjs-boilerplate.git
-   cd nextjs-boilerplate
-   ```
+```bash
+git clone https://github.com/lazylinz/nextjs-boilerplate.git
+cd nextjs-boilerplate
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+# or
+yarn install
+```
 
-### Development
+3. Create environment variables:
+```bash
+cp .env.example .env.local
+```
 
-Run the development server:
-
+4. Start development server:
 ```bash
 npm run dev
+# or
+yarn dev
 ```
 
-The application will be available at `http://localhost:3000` (or the Vercel dev port).
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-### Building for Production
+## 📡 Webhook API
 
-Build the project:
+The webhook API is available at `/api/webhook` and accepts POST requests.
 
-```bash
-npm run build
-```
+### Request Format
 
-### Starting the Production Server
-
-Start the production server:
-
-```bash
-npm start
-```
-
-## API Endpoints
-
-### POST /api/webhook
-
-Webhook endpoint that processes incoming requests and forwards them to Pollinations AI.
-
-**Request Body:**
 ```json
 {
-  "message": "Your request message",
-  "model": "desired-model"
+  "event": "user.created",
+  "timestamp": 1704542412000,
+  "data": {
+    "userId": "123",
+    "email": "user@example.com"
+  }
 }
 ```
 
-**Response:**
+### Request Headers
+
+- `Content-Type: application/json`
+- `X-Webhook-Signature: <signature>` (optional, for signature verification)
+
+### Signature Verification
+
+To verify webhook signatures, set the `WEBHOOK_SECRET` environment variable and include the signature header:
+
+```typescript
+const crypto = require('crypto');
+const payload = JSON.stringify(body);
+const signature = crypto
+  .createHmac('sha256', process.env.WEBHOOK_SECRET)
+  .update(payload)
+  .digest('hex');
+```
+
+### Supported Events
+
+- `test` - Test webhook event
+- `user.created` - User creation event
+- `user.updated` - User update event
+- Custom events can be added to the switch statement
+
+### Response Format
+
 ```json
 {
   "success": true,
-  "message": "Webhook processed and forwarded successfully",
-  "data": { /* Pollinations AI response */ }
+  "message": "Webhook received successfully",
+  "data": {
+    "event": "user.created",
+    "processedAt": "2024-01-06T11:00:12.000Z"
+  }
 }
 ```
 
-**Features:**
-- Accepts POST requests only (returns 405 for other methods)
-- Strips sensitive fields: `apiKey`, `secret`, `token`, `password`
-- Adds a unique nonce to each request
-- Includes timestamp in ISO 8601 format
-- Forwards processed payload to Pollinations AI API
-- Comprehensive error handling and logging
+## 🚀 Deployment
 
-## Deployment
+### Vercel Deployment
 
-### Deploy to Vercel
+1. Connect your GitHub repository to [Vercel](https://vercel.com)
+2. Vercel will automatically detect Next.js and configure the build settings
+3. Add environment variables in Vercel dashboard
+4. Deploy with a single push to main branch
 
-1. Push your code to GitHub
-2. Import the repository in [Vercel Dashboard](https://vercel.com/dashboard)
-3. Vercel will automatically detect the Next.js project and configure deployment
-4. Your API routes will be automatically deployed as serverless functions
+### Environment Variables for Production
 
-### Environment Variables
+```bash
+WEBHOOK_SECRET=your-secret-key
+NEXT_PUBLIC_API_URL=https://yourdomain.com
+```
 
-Add any required environment variables in the Vercel Dashboard under Project Settings > Environment Variables.
+## 📦 Available Scripts
 
-## Security
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
 
-- Sensitive fields (API keys, passwords, tokens) are automatically stripped from forwarded requests
-- Each request is assigned a unique nonce for security and tracking
-- Requests are validated (POST only)
-- Error messages are descriptive but don't expose internal details
+## 🔧 Configuration
 
-## License
+### TypeScript
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Strict mode is enabled for better type safety. Modify `tsconfig.json` to adjust compiler options.
 
-## Author
+### Next.js
 
-Lazy Linz (@lazylinz)
+Key settings in `next.config.js`:
+- `reactStrictMode: true` - Highlight potential problems
+- `swcMinify: true` - Use SWC for faster builds
+- Custom page extensions configuration
 
-## Support
+### Vercel
 
-For issues, questions, or contributions, please open an issue or submit a pull request on GitHub.
+Modify `vercel.json` to:
+- Set build and dev commands
+- Configure environment variables
+- Set API function max duration
+- Configure regions
+
+## 🔒 Security
+
+- Environment variables are never exposed to the browser
+- Webhook signature verification prevents unauthorized requests
+- TypeScript strict mode catches type-related bugs
+- Dependencies are regularly updated
+
+## 📚 Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs)
+- [Vercel Documentation](https://vercel.com/docs)
+
+## 📝 License
+
+MIT License - feel free to use this boilerplate for your projects.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Support
+
+For issues and questions, please open an issue on GitHub.
+
+---
+
+**Created on**: 2026-01-06
+**Next.js Version**: 16.0.0+
+**React Version**: 19.0.0+
