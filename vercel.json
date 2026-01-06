@@ -1,5 +1,4 @@
 {
-  "projectId": "",
   "orgId": "",
   "buildCommand": "next build",
   "devCommand": "next dev",
