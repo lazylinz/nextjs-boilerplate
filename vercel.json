@@ -6,8 +6,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url",
-    "WEBHOOK_SECRET": "@webhook_secret"
+    "NEXT_PUBLIC_API_URL": "https://text.pollinations.ai/",
+    "WEBHOOK_SECRET": ""
   },
   "regions": [
     "iad1"
