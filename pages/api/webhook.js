@@ -1,21 +1,36 @@
-export default function handler(req, res) {
-  if (req.method === "GET") {
-    return res.status(200).json({ message: "Webhook is live!" });
+// pages/api/llm.js
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
   }
 
-  if (req.method === "POST") {
-    try {
-      const payload = req.body;
-      console.log("Received payload:", payload);
+  const body = req.body;
 
-      // You can add custom logic here
+  // Validate minimal shape
+  if (!body.messages || !Array.isArray(body.messages)) {
+    return res.status(400).json({ error: "Missing messages array" });
+  }
 
-      return res.status(200).json({ status: "ok", data: payload });
-    } catch (err) {
-      console.error("Error handling POST:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
+  try {
+    const pollinationsRes = await fetch("https://text.pollinations.ai/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!pollinationsRes.ok) {
+      const errorText = await pollinationsRes.text();
+      return res.status(502).json({ error: "Upstream error", details: errorText });
     }
-  }
 
-  return res.status(405).json({ error: "Method not allowed" });
+    // Pollinations returns raw text by default
+    const text = await pollinationsRes.text();
+    
+    return res.status(200).json({ result: text });
+
+  } catch (err) {
+    return res.status(500).json({ error: "Internal error", message: err.message });
+  }
 }
