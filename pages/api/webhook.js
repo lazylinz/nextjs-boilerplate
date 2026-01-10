@@ -6,30 +6,28 @@ export default async function handler(req, res) {
 
   const body = req.body;
 
-  // Validate minimal shape
   if (!body.messages || !Array.isArray(body.messages)) {
     return res.status(400).json({ error: "Missing messages array" });
   }
 
   try {
-    const pollinationsRes = await fetch("https://text.pollinations.ai/", {
+    // Use the OpenAI-compatible POST endpoint
+    const pollinationsRes = await fetch("https://text.pollinations.ai/openai", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
 
+    const text = await pollinationsRes.text();
+
     if (!pollinationsRes.ok) {
-      const errorText = await pollinationsRes.text();
-      return res.status(502).json({ error: "Upstream error", details: errorText });
+      return res.status(502).json({ error: "Upstream error", details: text });
     }
 
-    // Pollinations returns raw text by default
-    const text = await pollinationsRes.text();
-    
-    return res.status(200).pollinationsRes;
-
+    // Send back raw text (or parse as JSON if the endpoint returns JSON)
+    return res.status(200).send(text);
   } catch (err) {
     return res.status(500).json({ error: "Internal error", message: err.message });
   }
