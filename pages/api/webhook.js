@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     // Pollinations returns raw text by default
     const text = await pollinationsRes.text();
     
-    return res.status(200).json({ result: text });
+    return res.status(200)pollinationsRes;
 
   } catch (err) {
     return res.status(500).json({ error: "Internal error", message: err.message });
